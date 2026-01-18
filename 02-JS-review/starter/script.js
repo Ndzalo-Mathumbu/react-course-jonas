@@ -178,6 +178,8 @@ const morePersonInfo = {
   age: 20,
 };
 
+///// Tenary Operator /////
+
 const personInfo = `${morePersonInfo.firstname} ${
   morePersonInfo.lastname
 } is an ${morePersonInfo.race} ${morePersonInfo.gender} at the age of ${
@@ -187,3 +189,30 @@ const personInfo = `${morePersonInfo.firstname} ${
 const tenary = morePersonInfo.age > 10 ? "older than 10" : "younger than 10";
 tenary;
 personInfo;
+
+///// Arrow Fuctions /////
+
+const calculateAge = (birthYear) => new Date().getFullYear() - birthYear;
+
+const personAge = calculateAge(2006);
+// const makePositive = Math.abs(personAge);
+// makePositive;
+personAge;
+
+///// Short-Circuiting and Logical Operators /////
+
+//// AND (&&) Operator | Only takes a falsey values it avoids true values.
+
+console.log(undefined && 10);
+console.log(10 && undefined);
+let boy = true;
+let girl = false;
+console.log(`the boy is ${boy} (TRUE)` && `the girl is ${girl} (FALSE)`);
+
+//// OR (||) Operator | Only takes a truethy values it avoids false values. Opposite of AND (&&)
+
+console.log(undefined || 10);
+console.log(10 || undefined);
+let man = true;
+let woman = false;
+console.log(`the boy is ${man} (TRUE)` || `the girl is ${woman} (FALSE)`);
