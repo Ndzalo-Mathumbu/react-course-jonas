@@ -142,3 +142,48 @@ function getBooks() {
 function getBook(id) {
   return data.find((d) => d.id === id);
 }
+
+///// Destructuring /////
+
+const book = getBook(2);
+const { title, author, pages, genres } = book;
+console.log(title, author, pages, genres);
+
+const [one, two, ...rest] = genres;
+console.log(one, two, ...rest);
+
+const numbers = [1, 2, 3, 4, 5];
+const number2 = [6, 7, 8, 9, 10];
+const moreNumbers = [...numbers, ...number2];
+const [num1, ...other] = moreNumbers;
+console.log(num1, ...other);
+
+const bookUpdate = {
+  ...book,
+  moviePublicationDate: "2002-4-5",
+  pages: 5678,
+};
+bookUpdate;
+
+const person = {
+  firstname: "Ndzalo NK",
+  lastname: "Mathumbu",
+  age: 19,
+  gender: "male",
+};
+
+const morePersonInfo = {
+  ...person,
+  race: "African",
+  age: 20,
+};
+
+const personInfo = `${morePersonInfo.firstname} ${
+  morePersonInfo.lastname
+} is an ${morePersonInfo.race} ${morePersonInfo.gender} at the age of ${
+  morePersonInfo.age - 1
+}`;
+
+const tenary = morePersonInfo.age > 10 ? "older than 10" : "younger than 10";
+tenary;
+personInfo;
