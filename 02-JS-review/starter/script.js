@@ -1,3 +1,5 @@
+const { response } = require("express");
+
 const data = [
   {
     id: 1,
@@ -145,7 +147,7 @@ function getBook(id) {
 
 ///// Destructuring /////
 
-const book = getBook(2);
+const book = getBook(3);
 const { title, author, pages, genres } = book;
 console.log(title, author, pages, genres);
 
@@ -216,3 +218,85 @@ console.log(10 || undefined);
 let man = true;
 let woman = false;
 console.log(`the boy is ${man} (TRUE)` || `the girl is ${woman} (FALSE)`);
+
+///// optional chaining (?.) /////
+
+const totalReviewCount = function (book) {
+  const good = book.reviews?.goodreads?.reviewsCount ?? 0;
+  const library = book.reviews?.librarything?.reviewsCount ?? 0;
+  return good + library;
+};
+console.log(totalReviewCount(book));
+
+///// the Array Map method /////
+
+const books = getBooks();
+const bookTitles = books.map((bookName) => bookName.title);
+bookTitles;
+
+const bookWriter = books.map((el) => el.author);
+bookWriter;
+
+const bookTitleWriter = [...bookTitles, ...bookWriter];
+bookTitleWriter;
+
+const bookTitleWriterObj = books.map((obj) => ({
+  title: book.title,
+  author: book.author,
+}));
+bookTitleWriterObj;
+
+///// The filter Array Method /////
+
+const bookPages = books.filter((el) => el.pages > 500 && el.hasMovieAdaptation);
+bookPages;
+
+const adventure = books
+  .filter((el) => el.genres.includes("adventure"))
+  .map((el) => el.title);
+adventure;
+
+///// Array Reduce method /////
+
+const numOfAllPage = books.reduce((acc, el) => acc + el.pages, 0);
+numOfAllPage;
+
+///// Sort method /////
+
+const sort = [6, 5, 3, 6, 3, 6, 3, 5];
+const sorted = sort.slice().sort((a, b) => b - a);
+sorted;
+
+const sortPages = books.slice().sort((a, b) => b.pages - a.pages);
+sortPages;
+
+///// Immutable Arrays /////
+
+//1) Adding object to an array
+const newBook = {
+  id: 6,
+  title: "Ben 10",
+  author: "Cartoon Network",
+};
+const bookAdded = [...books, newBook];
+// const bookAdded = books.push(newBook);
+
+bookAdded;
+
+//2) Delete object from an array
+
+const deleteBook = books.filter((el) => el.id !== 3);
+deleteBook;
+
+///// Async/Await Javascript (Promises) /////
+
+/* fetch("https://jsonplaceholder.typicode.com/todos")
+  .then((response) => response.json())
+  .then((data) => console.log(data)); */
+
+const API = async function () {
+  const response = await fetch("https://jsonplaceholder.typicode.com/todos");
+  const data = await response.json();
+  console.log(data);
+};
+API();
