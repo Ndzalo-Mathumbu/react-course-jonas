@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDom from "react-dom/client";
-// import "./index.css";
+import "./index.css";
 // import PizzaFocaccia from "03-pizza-menu/public/pizzas/focaccia.jpg";
 
 const pizzaData = [
@@ -54,18 +54,18 @@ const pizzaData = [
   },
 ];
 
-const findPizza = function (pizzaId) {
-  return pizzaData.find((el) => el.id === pizzaId);
-};
+// const findPizza = function (pizzaId) {
+//   return pizzaData.find((el) => el.id === pizzaId);
+// };
 
-const foundPizza = findPizza(1);
-const foundPizza2 = findPizza(2);
-const foundPizza3 = findPizza(3);
-const foundPizza4 = findPizza(4);
+// const foundPizza = findPizza(1);
+// const foundPizza2 = findPizza(2);
+// const foundPizza3 = findPizza(3);
+// const foundPizza4 = findPizza(4);
 // const foundPizza5 = findPizza(5);
 // const foundPizza6 = findPizza(6);
 
-console.log(foundPizza);
+// console.log(foundPizza);
 
 const App = function () {
   return (
@@ -96,7 +96,12 @@ const Menu = function () {
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <Pizza
+      <ul className="pizzas">
+        {pizzaData.map((pizza) => (
+          <Pizza pizzaObject={pizza} key={pizza.id} />
+        ))}
+      </ul>
+      {/* <Pizza
         picture="./pizzas/focaccia.jpg"
         ingredient={foundPizza.ingredients}
         name={foundPizza.name}
@@ -123,7 +128,7 @@ const Menu = function () {
         name={foundPizza4.name}
         price={foundPizza4.price}
         alt={foundPizza4.name}
-      />
+      /> */}
     </main>
   );
 };
@@ -131,14 +136,14 @@ const Menu = function () {
 const Pizza = function (props) {
   console.log(props);
   return (
-    <div className="pizza">
-      <img src={props.picture} alt={props.alt} />
+    <li className="pizza">
+      <img src={props.pizzaObject.photoName} alt={props.alt} />
       <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredient}</p>
-        <span>{props.price + 1}</span>
+        <h3>{props.pizzaObject.name}</h3>
+        <p>{props.pizzaObject.ingredients}</p>
+        <span>{props.pizzaObject.price + 1}</span>
       </div>
-    </div>
+    </li>
   );
 };
 
@@ -161,15 +166,14 @@ const Footer = function () {
 };
 
 ///// Render the root or the app in the DOM /////
-/* ReactDom.createRoot(document.getElementById("root")).render(
+ReactDom.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
-); */
+);
 
-///// Challenge No.1 building a developer card /////
-
-const App2 = function () {
+///// Challenge No.1 building a developer card 👇 /////
+/* const App2 = function () {
   return (
     <>
       <Card />
@@ -258,3 +262,4 @@ ReactDom.createRoot(document.getElementById("root")).render(
     <App2 />
   </React.StrictMode>
 );
+ */
