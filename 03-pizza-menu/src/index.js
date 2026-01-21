@@ -93,14 +93,35 @@ const Header = function () {
 };
 
 const Menu = function () {
+  const pizzaFood = pizzaData;
+  const itemsInArray = pizzaFood.length;
+  /* if (itemsInArray === 0)
+    return (
+      <p>
+        You clear an array by replacing it with an empty one, not mutating it.
+        In React, that means setting state to [] so the UI updates properly.
+      </p>
+    ); */
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <ul className="pizzas">
-        {pizzaData.map((pizza) => (
-          <Pizza pizzaObject={pizza} key={pizza.id} />
-        ))}
-      </ul>
+
+      {itemsInArray > 0 ? (
+        <>
+          <p>
+            You clear an array by replacing it with an empty one, not mutating
+            it. In React, that means setting state to [] so the UI updates
+            properly.
+          </p>
+          <ul className="pizzas">
+            {pizzaFood.map((pizza) => (
+              <Pizza pizzaObject={pizza} key={pizza.id} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        "No Pizzas Available"
+      )}
       {/* <Pizza
         picture="./pizzas/focaccia.jpg"
         ingredient={foundPizza.ingredients}
@@ -134,14 +155,18 @@ const Menu = function () {
 };
 
 const Pizza = function (props) {
-  console.log(props);
+  /*const Pizza = function ({pizzaObject})  */
+  // console.log(props);
+  // if (props.pizzaObject.soldOut) return null;
   return (
-    <li className="pizza">
+    <li className={`pizza ${props.pizzaObject.soldOut ? "sold-out" : ""}`}>
       <img src={props.pizzaObject.photoName} alt={props.alt} />
       <div>
         <h3>{props.pizzaObject.name}</h3>
         <p>{props.pizzaObject.ingredients}</p>
-        <span>{props.pizzaObject.price + 1}</span>
+        <span>
+          {props.pizzaObject.soldOut ? "SOLD OUT" : props.pizzaObject.price}
+        </span>
       </div>
     </li>
   );
@@ -149,8 +174,9 @@ const Pizza = function (props) {
 
 const Footer = function () {
   const hour = new Date().getHours();
+  const min = new Date().getMinutes();
   const houropen = 8;
-  const hourClose = 22;
+  const hourClose = 20;
   const shopOpen = hour >= houropen && houropen <= hourClose;
   console.log(houropen, shopOpen);
 
@@ -158,108 +184,159 @@ const Footer = function () {
   //   ? alert("Shop is open")
   //   : alert("Shop is not open");
 
+  /* if (!shopOpen) return `Shop is closed time is ${hour}:${min} you are late.`; */
+
   return (
     <footer className="footer">
-      <p>Pizza Shop Is Open {hour}</p>
+      <div className="order">
+        {shopOpen && <Buy hourTime={hour} minTime={min} />}
+        <button className="btn">Shop</button>
+      </div>
     </footer>
+  );
+};
+
+const Buy = function (props) {
+  return (
+    `Shop is open the time is ${props.hourTime}:${props.minTime}` ||
+    `Shop is closed time is ${props.hourTime}:${props.minTime}`
   );
 };
 
 ///// Render the root or the app in the DOM /////
 ReactDom.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <App />{" "}
   </React.StrictMode>
 );
 
-///// Challenge No.1 building a developer card 👇 /////
-/* const App2 = function () {
-  return (
-    <>
-      <Card />
-    </>
-  );
-};
+///// Challenge No.1 & 2 building a developer card  👇 /////
 
-const Card = function () {
-  const styleCard = {
-    width: "390px",
-    height: "460px",
-    backgroundColor: "blue",
-    margin: "0 auto",
-    borderRadius: "5px",
-    border: "2px solid black",
-  };
-  const styleIMG = {
-    width: "100%",
-    height: "55%",
-    objectFit: "cover",
-  };
+// const skillArray = [
+//   { skillName: "HTML+CSS", level: "Advanced", color: "orange" },
+//   { skillName: "JavaScript", level: "Intermediate", color: "gray" },
+//   { skillName: "React", level: "Intermediate", color: "cyan" },
+//   { skillName: "Node.js", level: "Beginner", color: "green" },
+//   { skillName: "Git", level: "Intermediate", color: "red" },
+//   { skillName: "AWS", level: "Beginner", color: "purple" },
+// ];
 
-  const styleName = {
-    textAlign: "center",
-    color: "white",
-    marginTop: "7px",
-    fontFamily: "Inter",
-  };
+// const App2 = function () {
+//   return (
+//     <>
+//       <Card />
+//     </>
+//   );
+// };
 
-  const styleInfo = {
-    textAlign: "center",
-    color: "white",
-    marginTop: "-7px",
-    fontFamily: "Inter",
-    padding: "1px",
-  };
+// const Card = function () {
+//   const styleCard = {
+//     width: "390px",
+//     height: "460px",
+//     backgroundColor: "blue",
+//     margin: "0 auto",
+//     borderRadius: "5px",
+//     border: "2px solid black",
+//   };
+//   const styleIMG = {
+//     width: "100%",
+//     height: "55%",
+//     objectFit: "cover",
+//   };
 
-  return (
-    <div style={styleCard}>
-      <img
-        style={styleIMG}
-        src="https://velaranks.com/wp-content/uploads/2024/12/Software-Development.webp"
-        alt="coder"
-      />
-      <h2 style={styleName}>John Doe</h2>
-      <h3 style={styleInfo}>
-        John Doe is a coder who writes bugs professionally and occasionally
-        fixes them by accident. Debugging is his cardio, coffee is his fuel, and
-        “it works on my machine” is his battle cry.
-      </h3>
-      <div
-        style={{
-          display: "flex",
-          gap: "2px",
-          position: "relative",
-          left: "-4.9px",
-        }}
-      >
-        <Skills skillName="HTML + CSS🎨" color="red" />
-        <Skills skillName="Javascript🤖" color="orange" />
-        <Skills skillName="React😀" color="skyblue" />
-      </div>
-    </div>
-  );
-};
+//   const styleName = {
+//     textAlign: "center",
+//     color: "white",
+//     marginTop: "7px",
+//     fontFamily: "Inter",
+//   };
 
-const Skills = function (props) {
-  const styleSkills = {
-    backgroundColor: props.color,
-    width: "150px",
-    borderRadius: "5px",
-    textAlign: "center",
-    fontFamily: "Inter",
-    color: "white",
-    position: "relative",
-    bottom: "13px",
-    left: "5px",
-    // display: "flex",
-    // marginTop: "3px",
-  };
-  return <div style={styleSkills}>{props.skillName}</div>;
-};
+//   const styleInfo = {
+//     textAlign: "center",
+//     color: "white",
+//     marginTop: "-7px",
+//     fontFamily: "Inter",
+//     padding: "1px",
+//   };
 
-ReactDom.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App2 />
-  </React.StrictMode>
-);
- */
+//   return (
+//     <div style={styleCard}>
+//       <img
+//         style={styleIMG}
+//         src="https://velaranks.com/wp-content/uploads/2024/12/Software-Development.webp"
+//         alt="coder"
+//       />
+//       <h2 style={styleName}>John Doe</h2>
+//       <h3 style={styleInfo}>
+//         John Doe is a coder who writes bugs professionally and occasionally
+//         fixes them by accident. Debugging is his cardio, coffee is his fuel, and
+//         “it works on my machine” is his battle cry.
+//       </h3>
+
+//       <div
+//         style={{
+//           display: "flex",
+//           gap: "3px",
+//           position: "relative",
+//           left: "-4.9px",
+//           flexWrap: "wrap",
+//         }}
+//       >
+//         {skillArray.map((skill) => (
+//           <SkillCards skillsObject={skill} />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+
+// const SkillCards = function ({ skillsObject }) {
+//   return (
+//     <>
+//       <Skills myskill={skillsObject} />
+//       {/* <div
+//         style={{
+//           display: "flex",
+//           gap: "2px",
+//           position: "relative",
+//           left: "-4.9px",
+//           marginTop: "3px",
+//           // flexWrap: "wrap",
+//         }}
+//       >
+//         <Skills myskill={skillsObject} />
+//       </div> */}
+//     </>
+//   );
+// };
+
+// const Skills = function ({ myskill }) {
+//   const styleSkills = {
+//     backgroundColor: myskill.color,
+//     width: "120px",
+//     borderRadius: "5px",
+//     textAlign: "center",
+//     fontFamily: "Inter",
+//     color: "white",
+//     position: "relative",
+//     bottom: "19px",
+//     left: "17px",
+//     fontSize: "x-small",
+//     // display: "flex",
+//     // marginTop: "3px",
+//   };
+//   return (
+//     <div style={styleSkills}>
+//       {myskill.skillName}
+//       {myskill.level === "Advanced" ? "💪" : ""}
+//       {myskill.level === "Intermediate" ? "👌" : ""}
+//       {myskill.level === "Beginner" ? "👶" : ""}
+//     </div>
+//   );
+// };
+
+// ReactDom.createRoot(document.getElementById("root")).render(
+//   <React.StrictMode>
+//     <App2 />
+//   </React.StrictMode>
+// );
