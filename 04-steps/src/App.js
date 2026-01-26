@@ -126,17 +126,53 @@ const DateCounter = function () {
     setDate(myDate);
     console.log(myDate);
   }; */
+
+  const handleSubmit = function (e) {
+    e.preventDefault();
+
+    console.log(e);
+  };
+
   return (
     <>
-      <div style={stepdiv}>
-        step: {stepnum} <button onClick={handleAddStep}>+</button>
-        <button onClick={handleMinusStep}>-</button>
-      </div>
-      <div style={stepdiv}>
-        Count: {countnum}
-        <button onClick={handleAddCounter}>+</button>
-        <button onClick={handleMinusCounter}>-</button>
-      </div>
+      <form style={stepdiv}>
+        <input
+          type="range"
+          min="0"
+          max="20"
+          value={stepnum}
+          onChange={(e) => {
+            const value = +e.target.value;
+            if (value === "") {
+              setStepnum("");
+              return;
+            }
+            setStepnum(value);
+          }}
+          onSubmit={handleSubmit}
+        />
+        {stepnum}
+      </form>
+      <form
+        style={stepdiv}
+        onChange={(e) => {
+          const value = +e.target.value;
+          if (value === "") {
+            setCountnum("");
+            return;
+          }
+          setCountnum(value);
+        }}
+        onSubmit={handleSubmit}
+      >
+        <input type="text" value={countnum} />
+        <button onClick={handleAddCounter} type="submit">
+          +
+        </button>
+        <button onClick={handleMinusCounter} type="submit">
+          -
+        </button>
+      </form>
       <p style={styleText}>
         {countnum} Days From Today Is Friday {/* {date.getDate()} */}
       </p>
