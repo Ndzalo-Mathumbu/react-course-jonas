@@ -103,43 +103,59 @@ const Item = function ({ listObj }) {
 const reactFlashcards = [
   {
     id: 1,
+    color: "darkgray",
     question: "What is JSX?",
     answer:
       "A syntax extension for JavaScript that looks like HTML and is used in React to describe UI.",
   },
   {
     id: 2,
+    color: "red",
     question: "What is a component in React?",
     answer:
       "A reusable piece of UI that can be a function or class, returning JSX.",
   },
   {
     id: 3,
+    color: "orange",
     question: "What is the difference between state and props?",
     answer:
       "State is internal and managed by the component; props are external and passed from parent to child.",
   },
   {
     id: 4,
+    color: "silver",
     question: "What is a controlled component?",
     answer:
       "An input element whose value is controlled by React state using value and onChange.",
   },
   {
     id: 5,
+    color: "green",
     question: "What is a React hook?",
     answer:
       "A special function that lets you use state or other React features in functional components, e.g., useState, useEffect.",
   },
   {
     id: 6,
+    color: "blue",
     question: "What is the purpose of a key in React lists?",
     answer:
-      "To give each element a unique identifier so React can efficiently update the DOM.",
+      "To give each element a unique identifier so React can efficiently update the DOM. ",
   },
 ];
 
 const App2 = function () {
+  /* return (
+
+**MY OWN TRY WITHOUT LESSON** (FAILED)
+  
+    <>
+      <div>
+        <FlashCards />
+      </div>
+    </>
+  ); */
   return (
     <>
       <FlashCards />
@@ -147,19 +163,92 @@ const App2 = function () {
   );
 };
 
-const FlashCards = function () {
+/* const FlashCards = function () {
+
+**MY OWN TRY BUILDING A FLIPCARD WITHOUT LESSON** (FAILED)
+
+  const [cardAns, setCardAns] = useState("");
+  const [cardClicked, setCardClicked] = useState(false);
+  const [cardID, setCardID] = useState([]);
+  const cards = {
+    display: "flex",
+    textAlign: "center",
+    padding: "12px",
+    justifyContent: "center",
+    marginBottom: "3px",
+    marginTop: "10px",
+    alignItems: "center",
+    borderRadius: "5px",
+    color: "white",
+  };
+
+  const UL = {
+    listStyle: "none",
+    padding: "5px",
+    display: "flex",
+    gap: "3px",
+    flexWrap: "wrap",
+    width: "100vw",
+    height: "50vh",
+    justifyContent: "center",
+  };
+
+  const handleCardAnswer = function (answer) {
+    setCardAns(answer);
+    setCardClicked((x) => {
+      x = true;
+      return x;
+    });
+  };
+  // console.log(cardClicked);
+  console.log(cardID);
   return (
     <>
       <div>
-        {reactFlashcards.map((x) => (
-          <Showcards cardObj={x} key={x.id} />
-        ))}
+        <ul style={UL}>
+          {reactFlashcards.map((x) => (
+            <li
+              style={{ ...cards, backgroundColor: x.color }}
+              key={x.id}
+              onClick={() => {
+                x.question = x.answer;
+                handleCardAnswer(x.answer);
+                if (cardClicked === true) setCardID((a) => [...a, x.id]);
+                if (cardID.includes(x.id))
+                  setCardID((a) => a.filter((z) => z !== x.id));
+
+                return cardAns;
+              }}
+            >
+              {x.question}
+            </li>
+          ))}
+        </ul>
       </div>
     </>
   );
+}; */
+
+///// After watching lesson ///// (Passed)
+
+const FlashCards = function () {
+  const [selectID, setselectID] = useState(null);
+  const handleCardAnswer = function (answer) {
+    setselectID(answer !== selectID ? answer : null);
+  };
+  return (
+    <div className="flashcard">
+      {reactFlashcards.map((x) => (
+        <div
+          key={x.id}
+          onClick={() => handleCardAnswer(x.id)}
+          className={x.id === selectID ? "bgColor" : ""}
+        >
+          <p>{x.id === selectID ? x.answer : x.question}</p>
+        </div>
+      ))}
+    </div>
+  );
 };
 
-const Showcards = function ({ cardObj }) {
-  return <>{cardObj}</>;
-};
 export default App2;
