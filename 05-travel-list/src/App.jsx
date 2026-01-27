@@ -1,17 +1,26 @@
 import { useState } from "react";
 
 const initialItems = [
-  { id: 1, description: "Passports", quantity: 2, packed: true },
+  { id: 1, description: "Passports", quantity: 2, packed: false },
   { id: 2, description: "Socks", quantity: 12, packed: false },
 ];
 
 const App = function () {
+  const [addToList, setAddToList] = useState(initialItems);
+  // console.log(numOfItemInArray);
+  const handleAddToList = function (objNew) {
+    setAddToList((x) => [...x, objNew]);
+  };
+  const handleDelete = function (itemID) {
+    setAddToList((x) => x.filter((bin) => bin.id !== itemID));
+  };
+
   return (
     <div className="app">
       <Logo />
-      <Form />
-      <PackageList />
-      <Stats />
+      <Form onAddList={handleAddToList} />
+      <PackageList newList={addToList} onDelete={handleDelete} />
+      <Stats numItems={addToList} />
     </div>
   );
 };
@@ -23,21 +32,21 @@ const Logo = function () {
     </>
   );
 };
-const Form = function () {
+const Form = function ({ onAddList }) {
   const [description, setDescription] = useState("");
   const [selectEl, setSelectEl] = useState(1);
-  const [addToList, setAddToList] = useState(initialItems);
+
   const handleSubmit = function (e) {
     e.preventDefault();
-    console.log(e);
     if (description === "") return;
     const addItem = {
       description: description,
-      selectEl: selectEl,
+      quantity: selectEl,
       packed: false,
       id: Date.now(),
     };
-    console.log(addItem);
+    onAddList(addItem);
+    // console.log(addToList);
     setDescription((x) => (x = ""));
     setSelectEl((x) => (x = 1));
   };
@@ -64,13 +73,13 @@ const Form = function () {
   );
 };
 
-const PackageList = function () {
+const PackageList = function ({ newList, onDelete }) {
   return (
     <>
       <div className="list">
         <ul>
-          {initialItems.map((x) => (
-            <Item listObj={x} key={x.id} />
+          {newList.map((x) => (
+            <Item listObj={x} key={x.id} onDelete={onDelete} />
           ))}
         </ul>
       </div>
@@ -78,29 +87,51 @@ const PackageList = function () {
   );
 };
 
-const Stats = function () {
+const Item = function ({ listObj, onDelete }) {
+  const [checkboxed, setCheckboxed] = useState(false);
+  // const [packedItem, setPackedItem] = useState([]);
+  return (
+    <li>
+      <input
+        type="checkbox"
+        value={listObj.packed}
+        onChange={(e) => {
+          if (e.target.checked) {
+            setCheckboxed(true);
+          } else {
+            setCheckboxed(false);
+          }
+        }}
+      />
+      <span style={checkboxed ? { textDecoration: "line-through" } : {}}>
+        {listObj.quantity} {listObj.description}
+      </span>
+      <button onClick={() => onDelete(listObj.id)}>❌</button>
+    </li>
+  );
+};
+
+const Stats = function ({ numItems }) {
+  if (!numItems.length)
+    return <p className="stats">Add Somthing To Your Vacation List 🧳 🏝</p>;
+  const numOfItemInArray = numItems.length;
   return (
     <>
       <footer className="stats">
-        <em>You have X items on your list, and you already packed X (x%)</em>
+        <em>
+          You have {numOfItemInArray} items on your list, sure you packed enough
+          🤔?
+        </em>
       </footer>
     </>
   );
 };
 
-const Item = function ({ listObj }) {
-  return (
-    <li>
-      <span style={listObj.packed ? { textDecoration: "line-through" } : {}}>
-        {listObj.quantity} {listObj.description}
-      </span>
-      <button>❌</button>
-    </li>
-  );
-};
-// export default App;
+export default App;
 
-const reactFlashcards = [
+///// practicing state /////
+
+/* const reactFlashcards = [
   {
     id: 1,
     color: "darkgray",
@@ -143,7 +174,7 @@ const reactFlashcards = [
     answer:
       "To give each element a unique identifier so React can efficiently update the DOM. ",
   },
-];
+]; */
 
 const App2 = function () {
   /* return (
@@ -156,11 +187,7 @@ const App2 = function () {
       </div>
     </>
   ); */
-  return (
-    <>
-      <FlashCards />
-    </>
-  );
+  return <>{/* <FlashCards /> */}</>;
 };
 
 /* const FlashCards = function () {
@@ -231,7 +258,7 @@ const App2 = function () {
 
 ///// After watching lesson ///// (Passed)
 
-const FlashCards = function () {
+/* const FlashCards = function () {
   const [selectID, setselectID] = useState(null);
   const handleCardAnswer = function (answer) {
     setselectID(answer !== selectID ? answer : null);
@@ -252,3 +279,4 @@ const FlashCards = function () {
 };
 
 export default App2;
+ */
