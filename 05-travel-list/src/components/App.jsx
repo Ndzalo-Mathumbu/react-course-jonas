@@ -1,4 +1,8 @@
 import { useState } from "react";
+import Logo from "./Logo";
+import Form from "./Form";
+import PackageList from "./PackingList";
+import Stats from "./Stats";
 
 const initialItems = [
   { id: 1, description: "Passports", quantity: 2, packed: false },
@@ -14,116 +18,27 @@ const App = function () {
   const handleDelete = function (itemID) {
     setAddToList((x) => x.filter((bin) => bin.id !== itemID));
   };
-
+  const handleDeleteALL = function () {
+    if (!addToList.length) {
+      alert("List already empty");
+      return;
+    }
+    const deleteConfirmed = window.confirm(
+      "Are you sure you want to clear your list?"
+    );
+    if (deleteConfirmed) setAddToList((x) => x.filter(() => false));
+  };
   return (
     <div className="app">
       <Logo />
       <Form onAddList={handleAddToList} />
-      <PackageList newList={addToList} onDelete={handleDelete} />
+      <PackageList
+        newList={addToList}
+        onDelete={handleDelete}
+        onDeleteALL={handleDeleteALL}
+      />
       <Stats numItems={addToList} />
     </div>
-  );
-};
-
-const Logo = function () {
-  return (
-    <>
-      <h1>🏖 Happy Vacation 🏝</h1>
-    </>
-  );
-};
-const Form = function ({ onAddList }) {
-  const [description, setDescription] = useState("");
-  const [selectEl, setSelectEl] = useState(1);
-
-  const handleSubmit = function (e) {
-    e.preventDefault();
-    if (description === "") return;
-    const addItem = {
-      description: description,
-      quantity: selectEl,
-      packed: false,
-      id: Date.now(),
-    };
-    onAddList(addItem);
-    // console.log(addToList);
-    setDescription((x) => (x = ""));
-    setSelectEl((x) => (x = 1));
-  };
-  return (
-    <>
-      <form className="add-form" onSubmit={handleSubmit}>
-        <h3>What do you need for your vacation</h3>
-        <select value={selectEl} onChange={(e) => setSelectEl(+e.target.value)}>
-          {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
-            <option value={num} key={num}>
-              {num}
-            </option>
-          ))}
-        </select>
-        <input
-          type="text"
-          placeholder="List Item..."
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <button>add item</button>
-      </form>
-    </>
-  );
-};
-
-const PackageList = function ({ newList, onDelete }) {
-  return (
-    <>
-      <div className="list">
-        <ul>
-          {newList.map((x) => (
-            <Item listObj={x} key={x.id} onDelete={onDelete} />
-          ))}
-        </ul>
-      </div>
-    </>
-  );
-};
-
-const Item = function ({ listObj, onDelete }) {
-  const [checkboxed, setCheckboxed] = useState(false);
-  // const [packedItem, setPackedItem] = useState([]);
-  return (
-    <li>
-      <input
-        type="checkbox"
-        value={listObj.packed}
-        onChange={(e) => {
-          if (e.target.checked) {
-            setCheckboxed(true);
-          } else {
-            setCheckboxed(false);
-          }
-        }}
-      />
-      <span style={checkboxed ? { textDecoration: "line-through" } : {}}>
-        {listObj.quantity} {listObj.description}
-      </span>
-      <button onClick={() => onDelete(listObj.id)}>❌</button>
-    </li>
-  );
-};
-
-const Stats = function ({ numItems }) {
-  if (!numItems.length)
-    return <p className="stats">Add Somthing To Your Vacation List 🧳 🏝</p>;
-  const numOfItemInArray = numItems.length;
-  return (
-    <>
-      <footer className="stats">
-        <em>
-          You have {numOfItemInArray} items on your list, sure you packed enough
-          🤔?
-        </em>
-      </footer>
-    </>
   );
 };
 

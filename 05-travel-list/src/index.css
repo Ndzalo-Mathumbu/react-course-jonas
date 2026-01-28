@@ -34,7 +34,7 @@ body {
 
 h1 {
   text-align: center;
-  background-color: #19e3fa;
+  background-color: #19befa;
   font-family: "Monoton";
   font-size: 8rem;
   text-transform: uppercase;
@@ -120,7 +120,7 @@ input {
 input[type="checkbox"] {
   height: 2rem;
   width: 2rem;
-  accent-color: #e5771f;
+  accent-color: #1f47e5;
 }
 
 .list li button {
@@ -133,7 +133,7 @@ input[type="checkbox"] {
 }
 
 .stats {
-  background-color: #4dc7e2;
+  background-color: #19befa;
   text-align: center;
   font-weight: 700;
   padding: 3.2rem 0;
