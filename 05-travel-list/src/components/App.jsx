@@ -4,6 +4,10 @@ import Form from "./Form";
 import PackageList from "./PackingList";
 import Stats from "./Stats";
 import "../style.css";
+import Bill from "./TipCalc-Bill";
+import Service from "./TipCalc-Service";
+import CalculationOutput from "./TipCalc-Output";
+import ResetButton from "./TipCalc-ResetBtn";
 
 const initialItems = [
   { id: 1, description: "Passports", quantity: 2, packed: false },
@@ -265,4 +269,29 @@ const AccordionItem = function ({ num, title, currentOpen, onOpen, children }) {
   );
 };
 
-export default AppTwo;
+// export default AppTwo;
+
+const AppThree = function () {
+  const [controlBill, setControlBill] = useState(0);
+
+  return (
+    <>
+      <br />
+      <Bill controlBill={controlBill} onControllBill={setControlBill} />
+      <br />
+      <Service name="My Service:" controlBill={controlBill} />
+      <br />
+      <Service name="Friend Service:" controlBill={controlBill} />
+      <br />
+      <br />
+      <CalculationOutput
+        controlBill={controlBill}
+        onControllBill={setControlBill}
+      />
+      <br />
+      <ResetButton />
+    </>
+  );
+};
+
+export default AppThree;
