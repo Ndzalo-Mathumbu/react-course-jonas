@@ -27,39 +27,19 @@ const App = function () {
             <div className={`${stepIN >= 2 ? `active` : ""}`}>2</div>
             <div className={`${stepIN >= 3 ? `active` : ""}`}>3</div>
           </div>
-
-          <StepMsg stepIN={stepIN}> {messages.at(stepIN - 1)}</StepMsg>
+          <p className="message">
+            step {stepIN}: {messages.at(stepIN - 1)}
+          </p>
           <div className="buttons">
-            <Button
-              backgroundColor="darkgray"
-              textColor="white"
-              onClick={previous}
-              text="Previous"
-              emoji="👈"
-            >
-              <span>👈</span> Previous
-            </Button>
-            <Button backgroundColor="darkgray" textColor="black" onClick={next}>
-              Next <span>👉 </span>
-            </Button>
+            <button style={{ backgroundColor: "darkgray" }} onClick={previous}>
+              Previous
+            </button>
+            <button style={{ backgroundColor: "darkgray" }} onClick={next}>
+              Next
+            </button>
           </div>
         </div>
       )}
-      <StepMsg stepIN={15}>
-        <h1>My new React step</h1>
-        <span>⚛️</span>
-        <Button backgroundColor="darkgray" textColor="black">
-          React Button
-        </Button>
-      </StepMsg>
-      <StepMsg stepIN={15}>
-        <h1>My new React step</h1>
-        <span>⚛️</span>
-      </StepMsg>
-      <StepMsg stepIN={15}>
-        <h1>My new React step</h1>
-        <span>⚛️</span>
-      </StepMsg>
       <button
         style={{
           margin: "0 auto",
@@ -79,29 +59,7 @@ const App = function () {
   );
 };
 
-const StepMsg = function ({ stepIN, children }) {
-  return (
-    <div className="message">
-      <h3>step {stepIN}</h3>
-      {children}
-    </div>
-  );
-};
-
-const Button = function ({ textColor, backgroundColor, onClick, children }) {
-  return (
-    <>
-      <button
-        style={{ backgroundColor: backgroundColor, color: textColor }}
-        onClick={onClick}
-      >
-        {children}
-      </button>
-    </>
-  );
-};
-
-export default App;
+// export default App;
 
 ///// Challenge 1: Date Counter version1 /////
 
@@ -222,4 +180,4 @@ const DateCounter = function () {
   );
 };
 
-// export default App2;
+export default App2;
