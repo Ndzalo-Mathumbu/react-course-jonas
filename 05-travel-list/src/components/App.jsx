@@ -43,7 +43,7 @@ const App = function () {
   );
 };
 
-export default App;
+// export default App;
 
 ///// practicing state /////
 
@@ -227,19 +227,31 @@ const AppTwo = function () {
 };
 
 function Accordion({ data }) {
+  const [currentOpen, setCurrentOpen] = useState(null);
   return (
     <div className="accordion">
       {data.map((a, i) => (
-        <AccordionItem title={a.title} answer={a.text} num={i + 1} key={i} />
+        <AccordionItem
+          title={a.title}
+          num={i + 1}
+          key={i}
+          currentOpen={currentOpen}
+          onOpen={setCurrentOpen}
+        >
+          {a.text}
+        </AccordionItem>
       ))}
     </div>
   );
 }
 
-const AccordionItem = function ({ num, title, answer }) {
-  const [open, setOpen] = useState(false);
+const AccordionItem = function ({ num, title, currentOpen, onOpen, children }) {
+  const open = num === currentOpen;
+  // const [open, setOpen] = useState(false);
   const handleOpen = function () {
-    setOpen((a) => !a);
+    // setOpen((a) => !a);
+    onOpen((a) => (a = num));
+    if (currentOpen === num) onOpen(null);
   };
   return (
     <>
@@ -248,9 +260,9 @@ const AccordionItem = function ({ num, title, answer }) {
         <p className="title">{title}</p>
         <p className="icon">{open ? `+` : `-`}</p>
       </div>
-      {open && <div className="content-box">{answer}</div>}
+      {open && <div className="content-box">{children}</div>}
     </>
   );
 };
 
-// export default AppTwo;
+export default AppTwo;
