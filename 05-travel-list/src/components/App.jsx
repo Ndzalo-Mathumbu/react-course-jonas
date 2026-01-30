@@ -47,9 +47,9 @@ const App = function () {
   );
 };
 
-// export default App;
+export default App;
 
-///// practicing state /////
+//practicing state
 
 /* const reactFlashcards = [
   {
@@ -112,7 +112,7 @@ const App2 = function () {
 
 /* const FlashCards = function () {
 
-**MY OWN TRY BUILDING A FLIPCARD WITHOUT LESSON** (FAILED)
+**BUILDING A FLIPCARD WITHOUT LESSON**
 
   const [cardAns, setCardAns] = useState("");
   const [cardClicked, setCardClicked] = useState(false);
@@ -176,7 +176,7 @@ const App2 = function () {
   );
 }; */
 
-///// After watching lesson ///// (Passed)
+// After watching lesson
 
 /* const FlashCards = function () {
   const [selectID, setselectID] = useState(null);
@@ -271,27 +271,43 @@ const AccordionItem = function ({ num, title, currentOpen, onOpen, children }) {
 
 // export default AppTwo;
 
+// Tip Calculator – section challenge
 const AppThree = function () {
-  const [controlBill, setControlBill] = useState(0);
-
+  const [controlBill, setControlBill] = useState();
+  const [tipResult, setTipResult] = useState(0);
   return (
     <>
       <br />
       <Bill controlBill={controlBill} onControllBill={setControlBill} />
       <br />
-      <Service name="My Service:" controlBill={controlBill} />
-      <br />
-      <Service name="Friend Service:" controlBill={controlBill} />
-      <br />
-      <br />
-      <CalculationOutput
-        controlBill={controlBill}
-        onControllBill={setControlBill}
+      <Service
+        name="My Service:"
+        controlBill={+controlBill}
+        tipResult={tipResult}
+        onSetTip={setTipResult}
       />
+      <br />
+      <Service
+        name="Friend Service:"
+        controlBill={+controlBill}
+        tipResult={tipResult}
+        onSetTip={setTipResult}
+      />
+      <br />
+      <br />
+      <CalculationOutput onSetTip={setTipResult}>
+        {controlBill && (
+          <h2>
+            You will pay R{Math.round(+controlBill + tipResult)} (R
+            {controlBill} + R{" "}
+            {Math.round(+controlBill + tipResult - controlBill)} tip)
+          </h2>
+        )}
+      </CalculationOutput>
       <br />
       <ResetButton />
     </>
   );
 };
 
-export default AppThree;
+// export default AppThree;

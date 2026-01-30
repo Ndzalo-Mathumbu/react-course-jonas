@@ -6,9 +6,9 @@ const Bill = function ({ onControllBill, controlBill }) {
   return (
     <>
       <div>
-        How much was the Bill: R
+        How much was the Bill: R{" "}
         <input
-          type="number"
+          type="text"
           value={controlBill}
           onChange={(e) => onControllBill(e.target.value)}
         />

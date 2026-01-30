@@ -1,15 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import AppThree from "./components/App";
-// import App from "./components/App";
+// import AppThree from "./components/App";
+import App from "./components/App";
 // import AppTwo from "./components/App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    {/* <App /> */}
+    <App />
     {/* <AppTwo /> */}
-    <AppThree />
+    {/* <AppThree /> */}
   </React.StrictMode>
 );
