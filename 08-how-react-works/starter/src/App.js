@@ -25,7 +25,7 @@ export default function App() {
     </div>
   );
 }
-
+console.log(<DifferentContent name="Ndzalo NK" />);
 function Tabbed({ content }) {
   const [activeTab, setActiveTab] = useState(0);
 
@@ -39,7 +39,10 @@ function Tabbed({ content }) {
       </div>
 
       {activeTab <= 2 ? (
-        <TabContent item={content.at(activeTab)} />
+        <TabContent
+          item={content.at(activeTab)}
+          key={crypto.getRandomValues(new Uint8Array(1))}
+        />
       ) : (
         <DifferentContent />
       )}
@@ -98,3 +101,7 @@ function DifferentContent() {
     </div>
   );
 }
+
+/* const randomnums = crypto.getRandomValues(new Uint16Array(1));
+console.log(randomnums);
+ */

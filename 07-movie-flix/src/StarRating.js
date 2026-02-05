@@ -6,8 +6,8 @@ import "./style.css";
 const AppTwo = function () {
   return (
     <>
-      <TextViewer />
-      {/* <StarRating size={100} maxRating={5} color="orange" /> */}
+      {/* <TextViewer /> */}
+      <StarRating size={100} maxRating={5} color="orange" />
     </>
   );
 };
@@ -123,7 +123,7 @@ const Star = function ({
 
 // Challenge: Text Expander Component 👇
 
-function TextViewer() {
+/* function TextViewer() {
   const [toggleText, setToggleText] = useState(false);
   const [toggleText2, setToggleText2] = useState(false);
   const [toggleText3, setToggleText3] = useState(false);
@@ -230,4 +230,5 @@ const Button = function ({ children, onClick, style }) {
     </>
   );
 };
+// export default AppTwo; */
 export default AppTwo;
