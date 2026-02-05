@@ -33,15 +33,15 @@ function App() {
   const handleSelection = function (friend) {
     // setSelectedFriend(friend);
     setSelectedFriend((current) =>
-      current?.id === friend?.id ? null : friend
+      current?.id === friend?.id ? null : friend,
     );
   };
   const handleSplit = function (value) {
     console.log(value);
     setFriendsArray((a) =>
       a.map((z) =>
-        z?.id === selectedFriend?.id ? { ...z, balance: z.balance + value } : z
-      )
+        z?.id === selectedFriend?.id ? { ...z, balance: z.balance + value } : z,
+      ),
     );
   };
   return (
@@ -59,6 +59,7 @@ function App() {
           selectedFriend={selectedFriend}
           onSplitBill={handleSplit}
           setSelectedFriend={setSelectedFriend}
+          key={selectedFriend.id}
         />
       )}
     </div>
