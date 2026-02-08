@@ -1,60 +1,7 @@
 import { useEffect, useState } from "react";
 
-const tempMovieData = [
-  {
-    imdbID: crypto.randomUUID(),
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-  },
-  {
-    imdbID: crypto.randomUUID(),
-    Title: "The Matrix",
-    Year: "1999",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
-  },
-  {
-    imdbID: crypto.randomUUID(),
-    Title: "Parasite",
-    Year: "2019",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
-  },
-  {
-    imdbID: crypto.randomUUID(),
-    Title: "Fast & Furious 9",
-    Year: "2019",
-    Poster:
-      "https://upload.wikimedia.org/wikipedia/en/thumb/2/2b/F9_film_poster.jpg/250px-F9_film_poster.jpg",
-  },
-];
-
-const tempWatchedData = [
-  {
-    imdbID: crypto.randomUUID(),
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-    runtime: 148,
-    imdbRating: 8.8,
-    userRating: 10,
-  },
-  {
-    imdbID: crypto.randomUUID(),
-    Title: "Back to the Future",
-    Year: "1985",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
-    runtime: 116,
-    imdbRating: 8.5,
-    userRating: 9,
-  },
-];
-
-const average = (arr) => arr.reduce((acc, cur) => acc + cur / arr.length, 0);
+const average = (arr) =>
+  arr.length === 0 ? 0 : arr.reduce((acc, cur) => acc + cur / arr.length, 0);
 
 const KEY = "dfc2a343";
 
@@ -65,21 +12,31 @@ export default function App() {
   const [isOpen1, setIsOpen1] = useState(true);
   const [isOpen2, setIsOpen2] = useState(true);
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState("Black panther");
   const [isLoading, setIsLoading] = useState(false);
 
   const [error, setError] = useState("");
+  const [selectedID, setSelectedID] = useState(null);
 
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie.userRating));
   const avgRuntime = average(watched.map((movie) => movie.runtime));
 
+  const handleSelectMovies = function (id) {
+    setSelectedID((a) => (id = a ? null : id));
+  };
+
+  const handlecloseMovie = function () {
+    setSelectedID(null);
+  };
+
   useEffect(() => {
     const getMovieData = async function () {
       try {
         setIsLoading((a) => (a = true));
+        setError("");
         const response = await fetch(
-          `http://www.omdbapi.com/?apikey=${KEY}&s=cars`,
+          `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
         );
 
         if (!response.ok) throw new Error("Something went unexpected.😕");
@@ -95,8 +52,13 @@ export default function App() {
         /*  setIsLoading((a) => (a = false)); */
       }
     };
+    if (!query.length) {
+      setMovies([]);
+      setError("");
+      return;
+    }
     getMovieData();
-  }, []);
+  }, [query]);
 
   return (
     <>
@@ -104,7 +66,7 @@ export default function App() {
         <SearchBar query={query} setQuery={setQuery} />
         {
           <p className="num-results">
-            Found <strong>{movies?.length}</strong> results
+            Found <strong>{movies?.length}</strong> movies
           </p>
         }
       </Navbar>
@@ -115,10 +77,19 @@ export default function App() {
           movies={movies}
           isLoading={isLoading}
           error={error}
+          query={query}
+          handleSelectMovies={handleSelectMovies}
         >
-          <center>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "60vh",
+            }}
+          >
             {error ? <p className="error">⛔️ {error} ⛔️</p> : <LoadingSymbol />}
-          </center>
+          </div>
         </ListOfMoviesLeftSide>
 
         <MoviesWatchedRightSide
@@ -128,6 +99,9 @@ export default function App() {
           isOpen2={isOpen2}
           setIsOpen2={setIsOpen2}
           watched={watched}
+          selectedID={selectedID}
+          handleSelectMovies={handleSelectMovies}
+          handlecloseMovie={handlecloseMovie}
         />
       </main>
     </>
@@ -149,13 +123,20 @@ const ListOfMoviesLeftSide = ({
   movies,
   children,
   isLoading,
-  error,
+  query,
+  handleSelectMovies,
 }) => (
   <div className="box">
     <Button onClick={() => onIsOpen((open) => !open)}>
       {isOpen ? "–" : "++"}
     </Button>
-    {isOpen && <DisplayListOfMovies movies={movies} />}
+
+    {query !== "" && isOpen && (
+      <DisplayListOfMovies
+        movies={movies}
+        handleSelectMovies={handleSelectMovies}
+      />
+    )}
     {isOpen && isLoading && children}
   </div>
 );
@@ -167,12 +148,17 @@ const MoviesWatchedRightSide = ({
   isOpen2,
   setIsOpen2,
   watched,
+  selectedID,
+  handleSelectMovies,
+  handlecloseMovie,
 }) => (
   <div className="box">
     <Button onClick={() => setIsOpen2((open) => !open)}>
       {isOpen2 ? "–" : "+"}
     </Button>
-    {isOpen2 && (
+    {isOpen2 && selectedID ? (
+      <MovieDetails selectedID={selectedID} onCloseMovie={handlecloseMovie} />
+    ) : (
       <>
         <Summary
           avgImdbRating={avgImdbRating}
@@ -180,7 +166,10 @@ const MoviesWatchedRightSide = ({
           avgRuntime={avgRuntime}
           watched={watched}
         />
-        <DisplayListOfWatchedMovies watched={watched} />
+        <DisplayListOfWatchedMovies
+          watched={watched}
+          handleSelectMovies={handleSelectMovies}
+        />
       </>
     )}
   </div>
@@ -233,11 +222,11 @@ const Logo = () => (
   </div>
 );
 
-const DisplayListOfMovies = ({ movies }) => (
-  <ul className="list">
+const DisplayListOfMovies = ({ movies, handleSelectMovies }) => (
+  <ul className="list list-movies">
     {movies?.map((movie) => (
       <MovieListLeftSide key={movie.imdbID}>
-        <li>
+        <li onClick={() => handleSelectMovies(movie.imdbID)}>
           <img src={movie.Poster} alt={`${movie.Title} poster`} />
           <h3>{movie.Title}</h3>
           <div>
@@ -282,8 +271,21 @@ const DisplayListOfWatchedMovies = ({ watched }) => (
 const LoadingSymbol = function () {
   return (
     <>
-      <div class="spinner">
-        <div class="spinnerin"></div>
+      <div className="spinner">
+        <div className="spinnerin"></div>
+      </div>
+    </>
+  );
+};
+
+const MovieDetails = function ({ selectedID, onCloseMovie }) {
+  return (
+    <>
+      <div className="details">
+        <button className="btn-back" onClick={onCloseMovie}>
+          &larr;
+        </button>
+        {selectedID}
       </div>
     </>
   );
