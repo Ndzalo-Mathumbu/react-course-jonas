@@ -258,6 +258,8 @@ body {
 
 .details img {
   width: 33%;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
 }
 
 .details-overview {
@@ -267,6 +269,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.4rem;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
 .details-overview h2 {

@@ -3,11 +3,12 @@ import "./style.css";
 
 // import PropTypes from "prop-types";
 
-const AppTwo = function () {
+const StarsRate = function ({ children }) {
   return (
     <>
       {/* <TextViewer /> */}
-      <StarRating size={100} maxRating={5} color="orange" />
+      {/* <StarRating size={25} maxRating={10} color="orange" onSetRating /> */}
+      {/* {children} */}
     </>
   );
 };
@@ -33,6 +34,7 @@ const StarRating = function ({
   color = "#fcc419",
   size = 48,
   defaultRating = 0,
+  onSetRating = () => {},
 }) {
   const [rating, setRating] = useState(defaultRating);
   const [tempRating, setTempRating] = useState(defaultRating);
@@ -42,29 +44,28 @@ const StarRating = function ({
     margin: "0px",
     color,
     fontSize: `${size / 1.5}px`,
-    // color: "green",
   };
 
   return (
-    <>
-      <div style={containerStyle}>
-        <div style={starContainerStyle}>
-          {Array.from({ length: maxRating }, (_, i) => (
-            <Star
-              /* full={fillStar} */
-              key={i + 1}
-              onClick={() => setRating((a) => (a = i + 1))}
-              onMouseEnter={() => setTempRating((a) => i + 1)}
-              onMouseLeave={() => setTempRating(0)}
-              full={tempRating ? tempRating >= i + 1 : rating >= i + 1}
-              color={color}
-              size={size}
-            />
-          ))}
-        </div>
-        <p style={textStyle}>{tempRating || rating || ""}</p>
+    <div style={containerStyle}>
+      <div style={starContainerStyle}>
+        {Array.from({ length: maxRating }, (_, i) => (
+          <Star
+            key={i + 1}
+            onClick={() => {
+              setRating(i + 1);
+              onSetRating(i + 1);
+            }}
+            onMouseEnter={() => setTempRating(i + 1)}
+            onMouseLeave={() => setTempRating(0)}
+            full={tempRating ? tempRating >= i + 1 : rating >= i + 1}
+            color={color}
+            size={size}
+          />
+        ))}
       </div>
-    </>
+      <p style={textStyle}>{tempRating || rating || ""}</p>
+    </div>
   );
 };
 
@@ -231,4 +232,5 @@ const Button = function ({ children, onClick, style }) {
   );
 };
 // export default AppTwo; */
-export default AppTwo;
+// export default StarsRate;
+export default StarRating;
