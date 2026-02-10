@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import StarsRate from "./StarRating.js";
 import StarRating from "./StarRating.js";
 
 const average = (arr) =>
@@ -7,7 +6,7 @@ const average = (arr) =>
 
 const KEY = "dfc2a343";
 
-export default function App() {
+function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
 
@@ -564,3 +563,76 @@ const MovieDetails = function ({
 
 const MovieListLeftSide = ({ children }) => <>{children}</>;
 const WatchedMovieList = ({ children }) => <>{children}</>;
+
+export default App;
+
+/// Challenge Currency converter 👇
+
+/* export default function AppThree() {
+  const [moneyInput, setMoneyInput] = useState(1);
+  const [changeCurrencyFROM, setChangeCurrencyFROM] = useState("EUR");
+  const [changeCurrencyTO, setChangeCurrencyTO] = useState("USD");
+  const [convertedValue, setConvertedValue] = useState(0);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const getCurrencyConverter = async function () {
+      try {
+        const response = await fetch(
+          `https://api.frankfurter.app/latest?amount=${+moneyInput}&from=${changeCurrencyFROM}&to=${changeCurrencyTO}`,
+        );
+
+        const data = await response.json();
+        if (data.message) throw new Error(data.message);
+
+        const {
+          rates: { [changeCurrencyTO]: convertRate },
+        } = data;
+
+        setConvertedValue(convertRate);
+        console.log(data);
+      } catch (err) {
+        setError(err.message);
+        console.log(err.message);
+      }
+    };
+
+    getCurrencyConverter();
+  }, [changeCurrencyFROM, changeCurrencyTO, moneyInput]);
+
+  return (
+    <div className="App">
+      <input
+        type="text"
+        value={moneyInput}
+        onChange={(e) => setMoneyInput(e.target.value)}
+      />
+      <h3>From</h3>{" "}
+      <select
+        value={changeCurrencyFROM}
+        onChange={(e) => setChangeCurrencyFROM(e.target.value)}
+      >
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="CAD">CAD</option>
+        <option value="INR">INR</option>
+      </select>
+      <h3>To</h3>{" "}
+      <select
+        value={changeCurrencyTO}
+        onChange={(e) => setChangeCurrencyTO(e.target.value)}
+      >
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="CAD">CAD</option>
+        <option value="INR">INR</option>
+      </select>
+      <h1>
+        {String(moneyInput).length >= 1 && !String(moneyInput).includes("-")
+          ? `${changeCurrencyTO}: ${Number(convertedValue).toFixed(2)}`
+          : error}
+      </h1>
+    </div>
+  );
+}
+ */
