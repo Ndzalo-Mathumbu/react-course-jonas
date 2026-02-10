@@ -14,7 +14,7 @@ export default function App() {
   const [isOpen1, setIsOpen1] = useState(true);
   const [isOpen2, setIsOpen2] = useState(true);
 
-  const [query, setQuery] = useState("Black panther");
+  const [query, setQuery] = useState("Black Panther");
   const [isLoading, setIsLoading] = useState(false);
 
   const [error, setError] = useState("");
@@ -41,12 +41,15 @@ export default function App() {
   };
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const getMovieData = async function () {
       try {
         setIsLoading((a) => (a = true));
         setError("");
         const response = await fetch(
           `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+          { signal: controller.signal },
         );
 
         if (!response.ok) throw new Error("Something went unexpected.😕");
@@ -56,8 +59,8 @@ export default function App() {
         /*  console.log(data.Search); */
         setIsLoading((a) => (a = false));
       } catch (err) {
-        console.error(err.message);
-        setError((a) => (a = err.message));
+        console.log(err.message);
+        if (err.name !== "AbortError") setError((a) => (a = err.message));
       } finally {
         /*  setIsLoading((a) => (a = false)); */
       }
@@ -68,7 +71,18 @@ export default function App() {
       return;
     }
     getMovieData();
+    return () => {
+      controller.abort();
+    };
   }, [query]);
+
+  // useEffect(() => {
+  //   document.addEventListener("keydown", (e) => {
+  //     if (e.code === "Escape") handlecloseMovie();
+  //     /*  if (e.code === "Enter") handlecloseMovie(); */
+  //     console.log("pushed", e.code);
+  //   });
+  // }, []);
 
   return (
     <>
@@ -177,6 +191,7 @@ const MoviesWatchedRightSide = ({
         onAddWatchedMovie={handleAddWatched}
         watched={watched}
         handleDeleteWatched={handleDeleteWatched}
+        handlecloseMovie={handlecloseMovie}
       >
         <div
           style={{
@@ -325,8 +340,9 @@ const MovieDetails = function ({
   children,
   onAddWatchedMovie,
   watched,
+  handlecloseMovie,
 }) {
-  const [movie, setMovie] = useState(null);
+  const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState(0);
 
@@ -351,6 +367,17 @@ const MovieDetails = function ({
   };
 
   useEffect(() => {
+    document.addEventListener("keydown", (e) => {
+      if (e.code === "Escape") handlecloseMovie();
+    });
+    return () => {
+      document.removeEventListener("keydown", (e) => {
+        if (e.code === "Escape") handlecloseMovie();
+      });
+    };
+  }, [handlecloseMovie]);
+
+  useEffect(() => {
     const getMovieDetails = async function () {
       try {
         setIsLoading(true);
@@ -364,7 +391,7 @@ const MovieDetails = function ({
         const data = await response.json();
         setMovie(data);
       } catch (err) {
-        console.error(err.message);
+        console.log(err.message);
       } finally {
         setIsLoading(false);
       }
@@ -374,6 +401,14 @@ const MovieDetails = function ({
 
     getMovieDetails();
   }, [selectedID]);
+
+  useEffect(() => {
+    document.title =
+      movie.Title === undefined ? "Loading title..." : `Movie: ${movie.Title}`;
+    return () => {
+      document.title = "MovieFlix";
+    };
+  }, [movie.Title]);
 
   return (
     <div className="details">
@@ -473,7 +508,7 @@ const MovieDetails = function ({
         console.log(data, "hello data");
         setIsLoading(false);
       } catch (err) {
-        console.error(err.message);
+        console.log(err.message);
       }
     };
     getMovieDetails();
