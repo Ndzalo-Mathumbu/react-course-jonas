@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import StarRating from "./StarRating.js";
 
 const average = (arr) =>
@@ -8,6 +8,7 @@ const KEY = "dfc2a343";
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
 
   const [isOpen1, setIsOpen1] = useState(true);
   const [isOpen2, setIsOpen2] = useState(true);
@@ -17,12 +18,6 @@ function App() {
 
   const [error, setError] = useState("");
   const [selectedID, setSelectedID] = useState(null);
-
-  // const [watched, setWatched] = useState([]);
-  const [watched, setWatched] = useState(() => {
-    const storeValue = localStorage.getItem("watched");
-    return JSON.parse(storeValue);
-  });
 
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie.userRating));
@@ -38,17 +33,11 @@ function App() {
 
   const handleAddWatched = function (movie) {
     setWatched((watch) => [...watch, movie]);
-
-    /*  localStorage.setItem("watched", JSON.stringify([...watched, movie])); */
   };
 
   const handleDeleteWatched = function (id) {
     setWatched((watch) => watch.filter((movie) => movie.imdbID !== id));
   };
-
-  useEffect(() => {
-    localStorage.setItem("watched", JSON.stringify(watched));
-  }, [watched]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -262,37 +251,15 @@ const Button = ({ children, onClick }) => (
   </button>
 );
 
-const SearchBar = ({ query, setQuery }) => {
-  /* useEffect(() => {
-    const element = document.querySelector(".search").focus();
-    console.log(element);
-  }, []); */
-
-  const inputEl = useRef(null);
-  useEffect(() => {
-    inputEl.current.focus();
-    const listenToKey = function () {
-      document.addEventListener("keydown", (e) => {
-        if (document.activeElement === inputEl.current) return;
-        if (e.code === "Enter") {
-          inputEl.current.focus();
-          setQuery("");
-        }
-      });
-    };
-    listenToKey();
-  }, [setQuery]);
-  return (
-    <input
-      className="search"
-      type="text"
-      placeholder="Search movies..."
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-      ref={inputEl}
-    />
-  );
-};
+const SearchBar = ({ query, setQuery }) => (
+  <input
+    className="search"
+    type="text"
+    placeholder="Search movies..."
+    value={query}
+    onChange={(e) => setQuery(e.target.value)}
+  />
+);
 
 const Logo = () => (
   <div className="logo">
@@ -376,19 +343,12 @@ const MovieDetails = function ({
 }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-
   const [userRating, setUserRating] = useState(0);
 
   const isWatched = watched.map((movie) => movie.imdbID).includes(selectedID);
   const watchedUserrating = watched.find(
     (movie) => movie.imdbID === selectedID,
   )?.userRating;
-
-  const countRef = useRef(0);
-
-  useEffect(() => {
-    if (userRating) countRef.current = countRef.current + 1;
-  }, [userRating]);
 
   const handleAdd = function () {
     if (!movie) return;
@@ -400,7 +360,6 @@ const MovieDetails = function ({
       runtime: Number(movie.Runtime.replace(" min", "")),
       imdbRating: +movie.imdbRating,
       userRating: userRating || 0,
-      countRatingDecision: countRef.current,
     };
 
     onAddWatchedMovie(newWatchedMovie);
