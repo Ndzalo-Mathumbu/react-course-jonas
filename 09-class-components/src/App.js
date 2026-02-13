@@ -1,4 +1,6 @@
-function getWeatherIcon(wmoCode) {
+import React from "react";
+
+/* function getWeatherIcon(wmoCode) {
   const icons = new Map([
     [[0], "☀️"],
     [[1], "🌤"],
@@ -55,3 +57,76 @@ async function getWeather(location) {
     console.err(err);
   }
 }
+ */
+
+/* const App = function () {
+  return <Name />;
+};
+
+const Name = function () {
+  return <h1>Ndzalo NK</h1>;
+}; */
+// export default App
+
+/* const car = "BMW";
+car()
+console.log(car); */
+
+class App extends React.Component {
+  render() {
+    return (
+      <>
+        <WeatherCounter />
+        {/* <Test /> */}
+      </>
+    );
+  }
+}
+
+class WeatherCounter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { temperature: 25 };
+    this.handleAddTemp = this.handleAddTemp.bind(this);
+    this.handleMinusTemp = this.handleMinusTemp.bind(this);
+  }
+
+  handleAddTemp = function () {
+    const addTemp = this.setState({ temperature: this.state.temperature + 1 });
+    return addTemp;
+  };
+  handleMinusTemp = function () {
+    const addTemp = this.setState({ temperature: this.state.temperature - 1 });
+    return addTemp;
+  };
+  componentDidMount() {
+    console.log("mounted");
+  }
+  componentWillUnmount() {
+    console.log("Unmounted");
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>{this.state.temperature}°</h1>
+        <button onClick={this.handleAddTemp}>Increase temp</button>{" "}
+        <button onClick={this.handleMinusTemp}>Decrease temp</button>
+      </div>
+    );
+  }
+}
+
+/* class Test {
+  name = "Ndzalo";
+
+  sayName() {
+    console.log(this.name);
+  }
+}
+
+const t = new Test();
+const func = t.sayName;
+func(); */
+
+export default App;

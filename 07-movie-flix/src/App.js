@@ -297,11 +297,11 @@ const DisplayListOfWatchedMovies = ({ watched, handleDeleteWatched }) => (
           <h3>{movie.Title}</h3>
           <div>
             <p>
-              <span>⭐️</span>
+              <span>✨</span>
               <span>{movie.imdbRating}</span>
             </p>
             <p>
-              <span>🌟</span>
+              <span>✨</span>
               <span>{movie.userRating}</span>
             </p>
             <p>
@@ -394,7 +394,7 @@ const MovieDetails = function ({
           `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedID}`,
         );
 
-        if (!response.ok) throw new Error("Failed to fetch movie");
+        if (!response.ok) throw new Error("Failed to fetch movie.");
 
         const data = await response.json();
         setMovie(data);
